@@ -1,0 +1,17 @@
+{
+    "success": true,
+    "statusCode": 200,
+    "message": "Specializations retrieved successfully",
+    "data": [
+        "Cardiology",
+        "Dermatology",
+        "Endocrinology",
+        "Gastroenterology",
+        "Neurology",
+        "Oncology",
+        "Orthopedics",
+        "Pediatrics",
+        "Psychiatry",
+        "Radiology"
+    ]
+}
