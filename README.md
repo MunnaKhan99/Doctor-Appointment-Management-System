@@ -1,12 +1,29 @@
-# React + Vite
+# Appointment Manager Frontend (Initial Setup + Login)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the initial version of the **React.js frontend** for the Appointment Manager system.  
+Currently, the project has been **set up** and the **Login page** functionality is implemented.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features Implemented
 
-## Expanding the ESLint configuration
+### Login
+- Login page (`/login`) with:
+  - Email & Password fields
+  - Role selection: Patient / Doctor
+  - Form validation and error handling
+  - Login API integration with backend
+  - Token is stored in `localStorage` on successful login
+  - Redirects to `/dashboard` after successful login
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## Technologies Used
+
+- React.js (Functional Components + Hooks)
+- Axios (HTTP requests)
+- React Router (Routing)
+- Tailwind CSS (Basic styling)
+
+---
+
