@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. John Doe",
+    "specialization": "Cardiologist",
+    "photo_url": "https://via.placeholder.com/100"
+  },
+  {
+    "id": 2,
+    "name": "Dr. Jane Smith",
+    "specialization": "Dentist",
+    "photo_url": "https://via.placeholder.com/100"
+  },
+  {
+    "id": 3,
+    "name": "Dr. Emily Brown",
+    "specialization": "Neurologist",
+    "photo_url": "https://via.placeholder.com/100"
+  }
+]

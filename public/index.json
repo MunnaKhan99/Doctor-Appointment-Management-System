@@ -1,8 +1,4 @@
-{
-    "success": true,
-    "statusCode": 200,
-    "message": "Specializations retrieved successfully",
-    "data": [
+ [
         "Cardiology",
         "Dermatology",
         "Endocrinology",
@@ -13,5 +9,4 @@
         "Pediatrics",
         "Psychiatry",
         "Radiology"
-    ]
-}
+]
