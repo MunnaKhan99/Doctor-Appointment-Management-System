@@ -1,35 +1,38 @@
-// 5. Create API utility - lib/api.js
+// lib/api.js
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 
-const API_BASE_URL = 'https://appointment-manager-node.onrender.com/api/v1';
-
-// Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: 'https://appointment-manager-node.onrender.com/api/v1'
 });
 
-// Add request interceptor to include token
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+// Request interceptor to add auth token (fallback to localStorage before store init)
+api.interceptors.request.use((config) => {
+  let token = useAuthStore.getState().token;
+  if (!token) {
+    try { token = localStorage.getItem('token') || '' } catch { token = '' }
+  }
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
-// Add response interceptor for error handling
+// Response interceptor to handle auth errors
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
       const { logout } = useAuthStore.getState();
       logout();
-      window.location.href = '/login';
+      // Avoid hard reload when possible; let ProtectedRoute handle redirect
+      // As a fallback (outside React tree), perform a soft navigation
+      if (typeof window !== 'undefined' && window.location.pathname !== '/login') {
+        try {
+          // Replace without full reload if SPA router picks it up
+          window.history.replaceState(null, '', '/login');
+        } catch (_err) { void _err }
+      }
     }
     return Promise.reject(error);
   }

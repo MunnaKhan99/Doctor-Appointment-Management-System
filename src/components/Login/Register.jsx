@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import RegisterForm from "./RegisterForm";
+import PatientRegistrationForm from "../forms/PatientRegistrationForm";
+import DoctorRegistrationForm from "../forms/DoctorRegistrationForm";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [toggle, setToggle] = useState("PATIENT");
+    const navigate = useNavigate();
     const location = useLocation();
 
     // Show success message if coming from registration success
@@ -23,23 +26,21 @@ const Register = () => {
 
                 {/* Role Toggle Buttons */}
                 <div className="flex justify-center mb-6 bg-gray-100 rounded-lg p-1">
-                    <button 
+                    <button
                         onClick={() => setToggle("PATIENT")}
-                        className={`flex-1 px-4 py-2 rounded-md transition duration-200 font-medium text-sm ${
-                            toggle === "PATIENT" 
-                                ? "bg-blue-600 text-white shadow-sm" 
-                                : "bg-transparent text-gray-600 hover:text-gray-800"
-                        }`}
+                        className={`flex-1 px-4 py-2 rounded-md transition duration-200 font-medium text-sm ${toggle === "PATIENT"
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "bg-transparent text-gray-600 hover:text-gray-800"
+                            }`}
                     >
                         👤 Patient
                     </button>
-                    <button 
+                    <button
                         onClick={() => setToggle("DOCTOR")}
-                        className={`flex-1 px-4 py-2 rounded-md transition duration-200 font-medium text-sm ${
-                            toggle === "DOCTOR" 
-                                ? "bg-blue-600 text-white shadow-sm" 
-                                : "bg-transparent text-gray-600 hover:text-gray-800"
-                        }`}
+                        className={`flex-1 px-4 py-2 rounded-md transition duration-200 font-medium text-sm ${toggle === "DOCTOR"
+                            ? "bg-blue-600 text-white shadow-sm"
+                            : "bg-transparent text-gray-600 hover:text-gray-800"
+                            }`}
                     >
                         🩺 Doctor
                     </button>
@@ -48,7 +49,7 @@ const Register = () => {
                 {/* Role Description */}
                 <div className="mb-4 p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-700 text-center">
-                        {toggle === "PATIENT" 
+                        {toggle === "PATIENT"
                             ? "Register as a patient to book appointments and manage your health records."
                             : "Register as a doctor to manage appointments and connect with patients."
                         }
@@ -56,14 +57,18 @@ const Register = () => {
                 </div>
 
                 {/* Registration Form */}
-                <RegisterForm role={toggle} />
+                {toggle === "PATIENT" ? (
+                    <PatientRegistrationForm onSuccess={() => navigate('/login', { state: { message: 'Registration successful! Please login.' } })} />
+                ) : (
+                    <DoctorRegistrationForm onSuccess={() => navigate('/login', { state: { message: 'Registration successful! Please login.' } })} />
+                )}
 
                 {/* Login Link */}
                 <div className="mt-6 pt-4 border-t border-gray-200">
                     <p className="text-center text-sm text-gray-600">
                         Already have an account?{" "}
-                        <Link 
-                            to="/login" 
+                        <Link
+                            to="/login"
                             className="text-blue-600 hover:text-blue-800 font-medium transition duration-200"
                         >
                             Login here

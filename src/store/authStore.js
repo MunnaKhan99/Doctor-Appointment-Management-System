@@ -9,36 +9,41 @@ export const useAuthStore = create(
       token: null,
       role: null,
       isAuthenticated: false,
-      
+
       login: (userData) => {
         const { token, user, role } = userData;
-        localStorage.setItem('token', token);
-        set({ 
-          user, 
-          token, 
-          role, 
-          isAuthenticated: true 
+        try { localStorage.setItem('token', token); } catch { /* ignore storage errors */ }
+        set({
+          user,
+          token,
+          role,
+          isAuthenticated: true
         });
       },
-      
+
       logout: () => {
-        localStorage.removeItem('token');
-        set({ 
-          user: null, 
-          token: null, 
-          role: null, 
-          isAuthenticated: false 
+        try { localStorage.removeItem('token'); } catch { /* ignore storage errors */ }
+        set({
+          user: null,
+          token: null,
+          role: null,
+          isAuthenticated: false
         });
       },
-      
+
+      updateUser: (updates) => {
+        const currentUser = get().user || {};
+        set({ user: { ...currentUser, ...updates } });
+      },
+
       // Initialize auth state from localStorage
       initializeAuth: () => {
         const token = localStorage.getItem('token');
         if (token) {
           // You might want to verify token with API
-          set({ 
-            token, 
-            isAuthenticated: true 
+          set({
+            token,
+            isAuthenticated: true
           });
         }
       }
@@ -47,6 +52,7 @@ export const useAuthStore = create(
       name: 'auth-storage',
       partialize: (state) => ({
         user: state.user,
+        token: state.token,
         role: state.role,
         isAuthenticated: state.isAuthenticated
       })

@@ -67,11 +67,11 @@ const router = createBrowserRouter([
 
 const App = () => {
   const { initializeAuth } = useAuthStore();
-  
+
   useEffect(() => {
     initializeAuth();
   }, []);
-  
+
   return (
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
