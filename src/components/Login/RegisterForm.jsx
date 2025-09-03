@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Add this import
+import { useNavigate } from "react-router-dom";
 
 const RegisterForm = ({ role }) => {
     const baseUrl = "https://appointment-manager-node.onrender.com/api/v1";
-    const navigate = useNavigate(); // Initialize navigate hook
+    const navigate = useNavigate();
 
     const [form, setForm] = useState({
         name: "",
@@ -15,9 +15,15 @@ const RegisterForm = ({ role }) => {
     });
     const [specializations, setSpecializations] = useState([]);
     const [error, setError] = useState("");
-    const [success, setSuccess] = useState(""); // Add success state
+    const [success, setSuccess] = useState("");
     const [loading, setLoading] = useState(false);
-
+    const [formErrors, setFormErrors] = useState({
+        name: "",
+        email: "",
+        password: "",
+        specialization: "",
+        photo_url: "",
+    });
     const [passwordValidation, setPasswordValidation] = useState({
         length: false,
         specialChar: false,
@@ -37,48 +43,95 @@ const RegisterForm = ({ role }) => {
         }
     }, [role]);
 
+    const validateName = (value) => {
+        if (!value) return "Name is required";
+        if (value.length < 2) return "Name must be at least 2 characters";
+        if (!/^[a-zA-Z\s]+$/.test(value)) return "Name can only contain letters and spaces";
+        return "";
+    };
+
+    const validateEmail = (value) => {
+        if (!value) return "Email is required";
+        const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        setEmailValid(isValid);
+        return isValid ? "" : "Please enter a valid email address";
+    };
+
+    const validatePassword = (value) => {
+        if (!value) return "Password is required";
+        const validation = {
+            length: value.length >= 8,
+            specialChar: /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(value),
+            upperLowerCase: /^(?=.*[a-z])(?=.*[A-Z])/.test(value),
+            numeric: /^(?=.*\d)/.test(value),
+        };
+        setPasswordValidation(validation);
+        if (!validation.length) return "Password must be at least 8 characters";
+        if (!validation.upperLowerCase) return "Password must contain uppercase and lowercase letters";
+        if (!validation.numeric) return "Password must contain at least one number";
+        if (!validation.specialChar) return "Password must contain at least one special character";
+        return "";
+    };
+
+    const validateSpecialization = (value) => {
+        if (role === "DOCTOR" && !value) return "Please select a specialization";
+        return "";
+    };
+
+    const validatePhotoUrl = (value) => {
+        if (!value) return "";
+        try {
+            new URL(value);
+            return /^https?:\/\/.+\.(jpg|jpeg|png|gif)$/i.test(value) ? "" : "Please enter a valid image URL (jpg, jpeg, png, gif)";
+        } catch {
+            return "Please enter a valid URL";
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // Clear messages when user starts typing
+        // Clear global error/success messages
         if (error) setError("");
         if (success) setSuccess("");
 
-        // live password validation
-        if (name === "password") {
-            setPasswordValidation({
-                length: value.length >= 8,
-                specialChar: /[ `!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/.test(value),
-                upperLowerCase: /^(?=.*[a-z])(?=.*[A-Z])/.test(value),
-                numeric: /^(?=.*\d)/.test(value),
-            });
-        }
-
-        // live email validation
-        if (name === "email") {
-            setEmailValid(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value));
-        }
-
+        // Update form state
         setForm({ ...form, [name]: value });
+
+        // Real-time validation
+        let errorMessage = "";
+        if (name === "name") errorMessage = validateName(value);
+        if (name === "email") errorMessage = validateEmail(value);
+        if (name === "password") errorMessage = validatePassword(value);
+        if (name === "specialization") errorMessage = validateSpecialization(value);
+        if (name === "photo_url") errorMessage = validatePhotoUrl(value);
+
+        setFormErrors({ ...formErrors, [name]: errorMessage });
     };
 
-    // Enhanced success handling
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
         setSuccess("");
 
-        if (!emailValid) return setError("Invalid email");
-        if (
-            !passwordValidation.length ||
-            !passwordValidation.numeric ||
-            !passwordValidation.upperLowerCase ||
-            !passwordValidation.specialChar
-        )
-            return setError("Password does not meet requirements");
+        // Validate all fields before submission
+        const nameError = validateName(form.name);
+        const emailError = validateEmail(form.email);
+        const passwordError = validatePassword(form.password);
+        const specializationError = validateSpecialization(form.specialization);
+        const photoUrlError = validatePhotoUrl(form.photo_url);
 
-        if (role === "DOCTOR" && !form.specialization) {
-            return setError("Please select specialization");
+        setFormErrors({
+            name: nameError,
+            email: emailError,
+            password: passwordError,
+            specialization: specializationError,
+            photo_url: photoUrlError,
+        });
+
+        if (nameError || emailError || passwordError || specializationError || photoUrlError) {
+            setError("Please fix the errors in the form");
+            return;
         }
 
         setLoading(true);
@@ -101,8 +154,6 @@ const RegisterForm = ({ role }) => {
             const res = await axios.post(url, payload);
 
             setLoading(false);
-
-            // Better success feedback
             const successMessage = res.data.message || "Registration successful! Redirecting to login...";
             setSuccess(successMessage);
 
@@ -123,8 +174,15 @@ const RegisterForm = ({ role }) => {
                 numeric: false,
             });
             setEmailValid(false);
+            setFormErrors({
+                name: "",
+                email: "",
+                password: "",
+                specialization: "",
+                photo_url: "",
+            });
 
-            // Navigate after a short delay to show success message
+            // Navigate after a short delay
             setTimeout(() => {
                 navigate("/login", {
                     state: {
@@ -137,73 +195,95 @@ const RegisterForm = ({ role }) => {
             setLoading(false);
             const errorMessage = err.response?.data?.message || "Registration failed. Please try again.";
             setError(errorMessage);
-
-            // Optional: Log error for debugging
             console.error("Registration error:", err);
         }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-                type="text"
-                name="name"
-                placeholder="Name"
-                value={form.name}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-                disabled={loading}
-            />
-            <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={form.email}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-                disabled={loading}
-            />
-            <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={form.password}
-                onChange={handleChange}
-                required
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-                disabled={loading}
-            />
-            <input
-                type="text"
-                name="photo_url"
-                placeholder="Photo URL (optional)"
-                value={form.photo_url}
-                onChange={handleChange}
-                className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
-                disabled={loading}
-            />
-
-            {role === "DOCTOR" && Array.isArray(specializations) && (
-                <select
-                    name="specialization"
-                    value={form.specialization}
+            <div>
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={form.name}
                     onChange={handleChange}
                     required
                     className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
                     disabled={loading}
-                >
-                    <option value="">Select specialization</option>
-                    {specializations.map((s, idx) => (
-                        <option key={idx} value={s}>
-                            {s}
-                        </option>
-                    ))}
-                </select>
+                />
+                {formErrors.name && (
+                    <div className="text-red-700 text-sm mt-1">❌ {formErrors.name}</div>
+                )}
+            </div>
+            <div>
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="Email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+                    disabled={loading}
+                />
+                {formErrors.email && (
+                    <div className="text-red-700 text-sm mt-1">❌ {formErrors.email}</div>
+                )}
+            </div>
+            <div>
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={form.password}
+                    onChange={handleChange}
+                    required
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+                    disabled={loading}
+                />
+                {formErrors.password && (
+                    <div className="text-red-700 text-sm mt-1">❌ {formErrors.password}</div>
+                )}
+            </div>
+            <div>
+                <input
+                    type="text"
+                    name="photo_url"
+                    placeholder="Photo URL (optional)"
+                    value={form.photo_url}
+                    onChange={handleChange}
+                    className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+                    disabled={loading}
+                />
+                {formErrors.photo_url && (
+                    <div className="text-red-700 text-sm mt-1">❌ {formErrors.photo_url}</div>
+                )}
+            </div>
+
+            {role === "DOCTOR" && Array.isArray(specializations) && (
+                <div>
+                    <select
+                        name="specialization"
+                        value={form.specialization}
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400"
+                        disabled={loading}
+                    >
+                        <option value="">Select specialization</option>
+                        {specializations.map((s, idx) => (
+                            <option key={idx} value={s}>
+                                {s}
+                            </option>
+                        ))}
+                    </select>
+                    {formErrors.specialization && (
+                        <div className="text-red-700 text-sm mt-1">❌ {formErrors.specialization}</div>
+                    )}
+                </div>
             )}
 
-            {/* Enhanced error and success messages */}
             {error && (
                 <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md text-sm mt-2">
                     ❌ {error}
@@ -234,42 +314,7 @@ const RegisterForm = ({ role }) => {
                 )}
             </button>
 
-            {/* Enhanced Real Time Form Validation */}
-            <div className="password-validity mt-4 p-3 bg-gray-50 rounded-lg">
-                <h4 className="text-sm font-medium text-gray-700 mb-2">Password Requirements:</h4>
-                <div className="space-y-1 text-sm">
-                    <div className="flex items-center">
-                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${passwordValidation.length ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        <span className={passwordValidation.length ? "text-green-700" : "text-red-700"}>
-                            At least 8 characters
-                        </span>
-                    </div>
-                    <div className="flex items-center">
-                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${passwordValidation.upperLowerCase ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        <span className={passwordValidation.upperLowerCase ? "text-green-700" : "text-red-700"}>
-                            Uppercase & lowercase letters
-                        </span>
-                    </div>
-                    <div className="flex items-center">
-                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${passwordValidation.numeric ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        <span className={passwordValidation.numeric ? "text-green-700" : "text-red-700"}>
-                            At least one number
-                        </span>
-                    </div>
-                    <div className="flex items-center">
-                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${passwordValidation.specialChar ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        <span className={passwordValidation.specialChar ? "text-green-700" : "text-red-700"}>
-                            At least one special character
-                        </span>
-                    </div>
-                    <div className="flex items-center">
-                        <span className={`inline-block w-3 h-3 rounded-full mr-2 ${emailValid ? 'bg-green-500' : 'bg-red-500'}`}></span>
-                        <span className={emailValid ? "text-green-700" : "text-red-700"}>
-                            Valid email address
-                        </span>
-                    </div>
-                </div>
-            </div>
+           
         </form>
     );
 };
