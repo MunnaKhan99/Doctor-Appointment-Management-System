@@ -14,6 +14,7 @@ import Register from "./components/Login/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PatientDashboard from "./pages/patient/PatientDashboard";
 import PatientAppointments from "./pages/patient/PatientAppointments";
+import DoctorAppointmentsPage from "./pages/doctor/DoctorAppointmentsPage";
 // import DoctorDashboard from "./pages/doctor/Dashboard";
 
 // Create a client
@@ -59,7 +60,15 @@ const router = createBrowserRouter([
     path: "/doctor/dashboard",
     element: (
       <ProtectedRoute allowedRoles={["DOCTOR"]}>
-        {/* <DoctorDashboard /> */}
+        <DoctorAppointmentsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/doctor/appointments",
+    element: (
+      <ProtectedRoute allowedRoles={["DOCTOR"]}>
+        <DoctorAppointmentsPage />
       </ProtectedRoute>
     ),
   },
@@ -70,7 +79,7 @@ const App = () => {
 
   useEffect(() => {
     initializeAuth();
-  }, []);
+  }, [initializeAuth]);
 
   return (
     <QueryClientProvider client={queryClient}>

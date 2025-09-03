@@ -24,6 +24,7 @@ const Navbar = () => {
     } else if (role === 'DOCTOR') {
       return [
         { name: 'Dashboard', path: '/doctor/dashboard', icon: '🏥' },
+        { name: 'Appointments', path: '/doctor/appointments', icon: '📅' },
       ];
     }
     return [];
