@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"; // Add this import
 const RegisterForm = ({ role }) => {
     const baseUrl = "https://appointment-manager-node.onrender.com/api/v1";
     const navigate = useNavigate(); // Initialize navigate hook
-    
+
     const [form, setForm] = useState({
         name: "",
         email: "",
@@ -39,7 +39,7 @@ const RegisterForm = ({ role }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
+
         // Clear messages when user starts typing
         if (error) setError("");
         if (success) setSuccess("");
@@ -101,11 +101,11 @@ const RegisterForm = ({ role }) => {
             const res = await axios.post(url, payload);
 
             setLoading(false);
-            
+
             // Better success feedback
             const successMessage = res.data.message || "Registration successful! Redirecting to login...";
             setSuccess(successMessage);
-            
+
             // Clear form on success
             setForm({
                 name: "",
@@ -114,7 +114,7 @@ const RegisterForm = ({ role }) => {
                 specialization: "",
                 photo_url: "",
             });
-            
+
             // Reset validation states
             setPasswordValidation({
                 length: false,
@@ -123,21 +123,21 @@ const RegisterForm = ({ role }) => {
                 numeric: false,
             });
             setEmailValid(false);
-            
+
             // Navigate after a short delay to show success message
             setTimeout(() => {
-                navigate("/login", { 
-                    state: { 
-                        message: "Registration successful! Please login with your credentials." 
-                    } 
+                navigate("/login", {
+                    state: {
+                        message: "Registration successful! Please login with your credentials."
+                    }
                 });
             }, 2000);
-            
+
         } catch (err) {
             setLoading(false);
             const errorMessage = err.response?.data?.message || "Registration failed. Please try again.";
             setError(errorMessage);
-            
+
             // Optional: Log error for debugging
             console.error("Registration error:", err);
         }
@@ -205,14 +205,14 @@ const RegisterForm = ({ role }) => {
 
             {/* Enhanced error and success messages */}
             {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
-                    <strong>Error:</strong> {error}
+                <div className="bg-red-50 border border-red-200 text-red-700 px-3 py-2 rounded-md text-sm mt-2">
+                    ❌ {error}
                 </div>
             )}
-            
+
             {success && (
-                <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
-                    <strong>Success:</strong> {success}
+                <div className="bg-green-50 border border-green-200 text-green-700 px-3 py-2 rounded-md text-sm mt-2">
+                    ✅ {success}
                 </div>
             )}
 

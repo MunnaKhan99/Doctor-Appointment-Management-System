@@ -6,7 +6,7 @@ import { AUTH_ROLES, getPostLoginRedirect } from '../../lib/auth';
 import api from '../../lib/api';
 import Button from '../ui/Button';
 import Select from '../ui/Select';
-import { toast } from '../../lib/toast';
+// import { toast } from '../../lib/toast';
 import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
 
@@ -37,15 +37,15 @@ const LoginForm = () => {
             const token = res?.data?.token || res?.data?.data?.token;
             const user = res?.data?.user || res?.data?.data?.user;
             if (!token) {
-                toast.error('Login succeeded but no token returned');
+                alert('Login succeeded but no token returned');
                 return;
             }
             login({ token, user, role: values.role });
-            toast.success('Logged in successfully');
+            alert('Logged in successfully');
             navigate(getPostLoginRedirect(values.role), { replace: true });
         } catch (err) {
             const message = err.response?.data?.message || 'Login failed';
-            toast.error(message);
+            alert(message);
         }
     };
 
