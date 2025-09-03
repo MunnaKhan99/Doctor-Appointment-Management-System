@@ -1,3 +1,4 @@
+// 2. Create Protected Route Component - components/ProtectedRoute.jsx
 import { Navigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 

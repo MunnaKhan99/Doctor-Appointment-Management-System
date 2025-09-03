@@ -1,3 +1,4 @@
+// 1. Create Zustand Auth Store - store/authStore.js
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
@@ -34,7 +35,7 @@ export const useAuthStore = create(
       initializeAuth: () => {
         const token = localStorage.getItem('token');
         if (token) {
-         
+          // You might want to verify token with API
           set({ 
             token, 
             isAuthenticated: true 

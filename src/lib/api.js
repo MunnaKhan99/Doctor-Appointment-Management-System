@@ -1,3 +1,4 @@
+// 5. Create API utility - lib/api.js
 import axios from 'axios';
 import { useAuthStore } from '../store/authStore';
 
@@ -7,6 +8,7 @@ const API_BASE_URL = 'https://appointment-manager-node.onrender.com/api/v1';
 const api = axios.create({
   baseURL: API_BASE_URL,
 });
+
 // Add request interceptor to include token
 api.interceptors.request.use(
   (config) => {

@@ -1,3 +1,4 @@
+//3. Updated Login Component - components/Login/Login.jsx
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -43,10 +44,10 @@ const Login = () => {
         form
       );
 
-   
+      // Use Zustand store instead of direct localStorage
       login({
         token: res.data.token,
-        user: res.data.user, 
+        user: res.data.user, // Assuming API returns user data
         role: form.role
       });
 
