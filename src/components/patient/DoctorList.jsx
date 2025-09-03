@@ -11,9 +11,9 @@ const DoctorList = ({ isLoading, error, onRetry, onBook }) => {
 
     if (isLoading) {
         return (
-            <Grid cols={3} gap={6}>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
                 {Array.from({ length: 6 }).map((_, i) => <LoadingCard key={i} />)}
-            </Grid>
+            </div>
         );
     }
 
@@ -37,11 +37,11 @@ const DoctorList = ({ isLoading, error, onRetry, onBook }) => {
     }
 
     return (
-        <Grid cols={4} gap={6} className="sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
             {doctors.map((doctor, index) => (
-                <DoctorCard key={doctor.id || doctor._id || `doctor-${index}`} doctor={doctor} onBook={onBook} />
+                <DoctorCard key={doctor.id || `doctor-${index}`} doctor={doctor} onBook={onBook} />
             ))}
-        </Grid>
+        </div>
     );
 };
 

@@ -50,13 +50,13 @@ const LoginForm = () => {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-3 sm:space-y-4">
             <div>
                 <input
                     type="email"
                     placeholder="Email"
                     {...register('email')}
-                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:outline-none ${errors.email ? 'border-red-400' : 'border-gray-300'}`}
+                    className={`w-full p-2.5 sm:p-3 border rounded-lg focus:ring-2 focus:outline-none text-sm sm:text-base ${errors.email ? 'border-red-400' : 'border-gray-300'}`}
                 />
                 {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>}
             </div>
@@ -65,7 +65,7 @@ const LoginForm = () => {
                     type="password"
                     placeholder="Password"
                     {...register('password')}
-                    className={`w-full p-3 border rounded-lg focus:ring-2 focus:outline-none ${errors.password ? 'border-red-400' : 'border-gray-300'}`}
+                    className={`w-full p-2.5 sm:p-3 border rounded-lg focus:ring-2 focus:outline-none text-sm sm:text-base ${errors.password ? 'border-red-400' : 'border-gray-300'}`}
                 />
                 {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>}
             </div>
@@ -78,7 +78,7 @@ const LoginForm = () => {
                 ]}
                 error={errors.role?.message}
             />
-            <Button type="submit" variant="primary" disabled={isSubmitting} loading={isSubmitting} className="w-full">
+            <Button type="submit" variant="primary" disabled={isSubmitting} loading={isSubmitting} className="w-full text-sm sm:text-base">
                 Login
             </Button>
         </form>

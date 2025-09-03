@@ -124,19 +124,44 @@ const PatientDashboard = () => {
       {/* Debug info - remove in production */}
       {/* Debug panel disabled in production build */}
 
-      {/* Search and Filter Bar (refactored) */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="md:col-span-2">
-          <SearchInput value={search} onChange={setSearch} placeholder="Search doctors by name..." />
+      {/* Search and Filter Bar - Mobile First */}
+      <div className="space-y-4 mb-6">
+        {/* Search Input - Full width on mobile */}
+        <div>
+          <SearchInput
+            value={search}
+            onChange={setSearch}
+            placeholder="Search doctors by name..."
+            className="w-full"
+          />
         </div>
-        <Select
-          label="Specialization"
-          value={specialization}
-          onChange={(e) => { setSpecialization(e.target.value); setCurrentPage(1); }}
-          options={[{ value: '', label: 'All Specializations' }, ...specializations.map((s) => (
-            typeof s === 'string' ? { value: s, label: s } : { value: s?.name || s?.value || s?.specialization, label: s?.label || s?.name || s?.specialization }
-          )).filter((o) => o.value)]}
-        />
+
+        {/* Filters Row - Stack on mobile, side by side on larger screens */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <Select
+            label="Specialization"
+            value={specialization}
+            onChange={(e) => { setSpecialization(e.target.value); setCurrentPage(1); }}
+            options={[{ value: '', label: 'All Specializations' }, ...specializations.map((s) => (
+              typeof s === 'string' ? { value: s, label: s } : { value: s?.name || s?.value || s?.specialization, label: s?.label || s?.name || s?.specialization }
+            )).filter((o) => o.value)]}
+          />
+          <Select
+            label="Per page"
+            value={String(storeLimit || 6)}
+            onChange={(e) => {
+              const newLimit = parseInt(e.target.value, 10) || 6;
+              useDoctorsStore.getState().setLimit(newLimit);
+              setCurrentPage(1);
+            }}
+            options={[
+              { value: '4', label: '4 per page' },
+              { value: '6', label: '6 per page' },
+              { value: '8', label: '8 per page' },
+              { value: '12', label: '12 per page' },
+            ]}
+          />
+        </div>
       </div>
 
       {/* Doctors Grid */}

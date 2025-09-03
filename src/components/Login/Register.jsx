@@ -18,17 +18,17 @@ const Register = () => {
     }, [location.state]);
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        <div className="flex items-center justify-center min-h-screen bg-gray-100 p-4">
+            <div className="bg-white shadow-lg rounded-xl p-6 sm:p-8 w-full max-w-md">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6 text-center text-gray-800">
                     Create Account
                 </h2>
 
-                {/* Role Toggle Buttons */}
-                <div className="flex justify-center mb-6 bg-gray-100 rounded-lg p-1">
+                {/* Role Toggle Buttons - Mobile responsive */}
+                <div className="flex justify-center mb-4 sm:mb-6 bg-gray-100 rounded-lg p-1">
                     <button
                         onClick={() => setToggle("PATIENT")}
-                        className={`flex-1 px-4 py-2 rounded-md transition duration-200 font-medium text-sm ${toggle === "PATIENT"
+                        className={`flex-1 px-3 sm:px-4 py-2 rounded-md transition duration-200 font-medium text-xs sm:text-sm ${toggle === "PATIENT"
                             ? "bg-blue-600 text-white shadow-sm"
                             : "bg-transparent text-gray-600 hover:text-gray-800"
                             }`}
@@ -37,7 +37,7 @@ const Register = () => {
                     </button>
                     <button
                         onClick={() => setToggle("DOCTOR")}
-                        className={`flex-1 px-4 py-2 rounded-md transition duration-200 font-medium text-sm ${toggle === "DOCTOR"
+                        className={`flex-1 px-3 sm:px-4 py-2 rounded-md transition duration-200 font-medium text-xs sm:text-sm ${toggle === "DOCTOR"
                             ? "bg-blue-600 text-white shadow-sm"
                             : "bg-transparent text-gray-600 hover:text-gray-800"
                             }`}
@@ -46,9 +46,9 @@ const Register = () => {
                     </button>
                 </div>
 
-                {/* Role Description */}
+                {/* Role Description - Mobile responsive */}
                 <div className="mb-4 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-700 text-center">
+                    <p className="text-xs sm:text-sm text-blue-700 text-center">
                         {toggle === "PATIENT"
                             ? "Register as a patient to book appointments and manage your health records."
                             : "Register as a doctor to manage appointments and connect with patients."

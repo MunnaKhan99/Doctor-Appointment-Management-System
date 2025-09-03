@@ -4,11 +4,11 @@ const Select = ({ label, error, options = [], className = '', ...props }) => {
     return (
         <div className={className}>
             {label && (
-                <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
+                <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1">{label}</label>
             )}
             <select
                 {...props}
-                className={`w-full p-2 border rounded-lg focus:ring-2 focus:ring-blue-400 ${error ? 'border-red-400' : 'border-gray-300'
+                className={`w-full p-2 sm:p-2.5 border rounded-lg focus:ring-2 focus:ring-blue-400 text-sm sm:text-base ${error ? 'border-red-400' : 'border-gray-300'
                     }`}
             >
                 {options.map((opt) => (

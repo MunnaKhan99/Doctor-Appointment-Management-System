@@ -111,11 +111,11 @@ const PatientAppointments = () => {
         </Button>
       ]}
     >
-      {/* Status Filter */}
-      <div className="mb-6">
+      {/* Status Filter - Mobile responsive */}
+      <div className="mb-4 sm:mb-6">
         <Card>
-          <CardContent>
-            <div className="flex flex-wrap gap-2">
+          <CardContent className="p-3 sm:p-6">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap gap-2">
               {statusOptions.map((option) => (
                 <button
                   key={option.value}
@@ -123,7 +123,7 @@ const PatientAppointments = () => {
                     setStatusFilter(option.value);
                     setCurrentPage(1);
                   }}
-                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${statusFilter === option.value
+                  className={`px-3 sm:px-4 py-2 text-xs sm:text-sm font-medium rounded-lg transition-colors ${statusFilter === option.value
                     ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
