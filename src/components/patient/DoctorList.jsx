@@ -37,9 +37,9 @@ const DoctorList = ({ isLoading, error, onRetry, onBook }) => {
     }
 
     return (
-        <Grid cols={3} gap={6}>
+        <Grid cols={4} gap={6} className="sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {doctors.map((doctor, index) => (
-                <DoctorCard key={doctor.id || `doctor-${index}`} doctor={doctor} onBook={onBook} />
+                <DoctorCard key={doctor.id || doctor._id || `doctor-${index}`} doctor={doctor} onBook={onBook} />
             ))}
         </Grid>
     );
