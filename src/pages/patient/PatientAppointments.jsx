@@ -5,21 +5,29 @@ import DashboardLayout from '../../components/layout/DashboardLayout';
 import { Card, CardContent } from '../../components/ui/Card';
 import { StatusBadge } from '../../components/ui/Card';
 import Button from '../../components/ui/Button';
-import { LoadingSkeleton } from '../../components/ui/Loading';
-import { EmptyState } from '../../components/layout/EmptyState';
-import Modal from '../../components/ui/Modal';
 import { toast } from '../../lib/toast';
 import api from '../../lib/api';
 import ConfirmDialog from '../../components/ui/ConfirmDialog';
 import AppointmentsList from '../../components/patient/AppointmentsList';
 import { useNavigate } from 'react-router-dom';
+import { Pagination } from '../../components/ui/Pagination';
+import { LoadingSkeleton } from '../../components/ui/Loading';
+import { EmptyState } from '../../components/layout/EmptyState';
+import Modal from '../../components/ui/Modal';
+
 
 const PatientAppointments = () => {
   const navigate = useNavigate();
   const [statusFilter, setStatusFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [showCancelModal, setShowCancelModal] = useState(false);
+
+
+
   const [appointmentToCancel, setAppointmentToCancel] = useState(null);
+
+
+
 
   const queryClient = useQueryClient();
   const limit = 10;
