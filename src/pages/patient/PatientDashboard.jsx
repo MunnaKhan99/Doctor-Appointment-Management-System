@@ -1,6 +1,5 @@
-
 // 1. Patient Dashboard - pages/patient/Dashboard.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Pagination } from '../../components/ui/Pagination';
 import Modal from '../../components/ui/Modal';
@@ -66,7 +65,11 @@ const PatientDashboard = () => {
     return () => clearTimeout(timer);
   }, [search, specialization, setPage]);
 
-  // handled inline in Select onChange
+  const specializationOptions = useMemo(() => {
+    return [{ value: '', label: 'All Specializations' }, ...specializations.map((s) => (
+      typeof s === 'string' ? { value: s, label: s } : { value: s?.name || s?.value || s?.specialization, label: s?.label || s?.name || s?.specialization }
+    )).filter((o) => o.value)];
+  }, [specializations]);
 
   // Handle book appointment
   const handleBookAppointment = (doctor) => {
@@ -122,8 +125,8 @@ const PatientDashboard = () => {
       {/* Debug panel disabled in production build */}
 
       {/* Search and Filter Bar - Mobile First */}
-      <div className="flex flex-wrap items-end gap-2 mb-6">
-        <div className="w-full sm:w-1/2">
+      <div className="flex flex-col sm:flex-row items-end gap-4 mb-6">
+        <div className="w-full sm:flex-1">
           <SearchInput
             value={search}
             onChange={setSearch}
@@ -131,17 +134,15 @@ const PatientDashboard = () => {
             className="w-full"
           />
         </div>
-        <div className="w-1/2 sm:w-1/4">
+        <div className="w-full sm:w-auto">
           <Select
             label="Specialization"
             value={specialization}
             onChange={(e) => { setSpecialization(e.target.value); setCurrentPage(1); }}
-            options={[{ value: '', label: 'All Specializations' }, ...specializations.map((s) => (
-              typeof s === 'string' ? { value: s, label: s } : { value: s?.name || s?.value || s?.specialization, label: s?.label || s?.name || s?.specialization }
-            )).filter((o) => o.value)]}
+            options={specializationOptions}
           />
         </div>
-        <div className="w-1/2 sm:w-1/4">
+        <div className="w-full sm:w-auto">
           <Select
             label="Per page"
             value={String(storeLimit || 6)}
