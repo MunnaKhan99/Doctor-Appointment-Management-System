@@ -117,17 +117,13 @@ const PatientDashboard = () => {
   // Legacy filter options and error handling removed in favor of store-driven UI
 
   return (
-    <DashboardLayout
-      title="Find Doctors"
-      subtitle="Search and book appointments with qualified doctors"
-    >
+    <DashboardLayout>
       {/* Debug info - remove in production */}
       {/* Debug panel disabled in production build */}
 
       {/* Search and Filter Bar - Mobile First */}
-      <div className="space-y-4 mb-6">
-        {/* Search Input - Full width on mobile */}
-        <div>
+      <div className="flex flex-wrap items-end gap-2 mb-6">
+        <div className="w-full sm:w-1/2">
           <SearchInput
             value={search}
             onChange={setSearch}
@@ -135,9 +131,7 @@ const PatientDashboard = () => {
             className="w-full"
           />
         </div>
-
-        {/* Filters Row - Stack on mobile, side by side on larger screens */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="w-1/2 sm:w-1/4">
           <Select
             label="Specialization"
             value={specialization}
@@ -146,6 +140,8 @@ const PatientDashboard = () => {
               typeof s === 'string' ? { value: s, label: s } : { value: s?.name || s?.value || s?.specialization, label: s?.label || s?.name || s?.specialization }
             )).filter((o) => o.value)]}
           />
+        </div>
+        <div className="w-1/2 sm:w-1/4">
           <Select
             label="Per page"
             value={String(storeLimit || 6)}

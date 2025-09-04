@@ -4,10 +4,7 @@ import DoctorAppointments from '../../components/doctor/DoctorAppointments';
 
 const DoctorAppointmentsPage = () => {
     return (
-        <DashboardLayout
-            title="Appointment Management"
-            subtitle="View and manage your patient appointments"
-        >
+        <DashboardLayout>
             <DoctorAppointments />
         </DashboardLayout>
     );

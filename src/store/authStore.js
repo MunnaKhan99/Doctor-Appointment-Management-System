@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+
 export const useAuthStore = create(
   persist(
     (set, get) => ({
@@ -19,10 +20,12 @@ export const useAuthStore = create(
           role,
           isAuthenticated: true
         });
+  
       },
 
       logout: () => {
         try { localStorage.removeItem('token'); } catch { /* ignore storage errors */ }
+    
         set({
           user: null,
           token: null,
@@ -45,6 +48,7 @@ export const useAuthStore = create(
             token,
             isAuthenticated: true
           });
+        
         }
       }
     }),

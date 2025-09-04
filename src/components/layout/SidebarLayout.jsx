@@ -14,14 +14,11 @@ const SidebarLayout = ({ children }) => {
         { name: 'Dashboard', path: '/patient/dashboard', icon: '🏠' },
         { name: 'Find Doctors', path: '/patient/dashboard', icon: '👨‍⚕️' },
         { name: 'My Appointments', path: '/patient/appointments', icon: '📅' },
-        { name: 'Medical History', path: '/patient/history', icon: '📋' },
       ];
     } else if (role === 'DOCTOR') {
       return [
         { name: 'Dashboard', path: '/doctor/dashboard', icon: '🏥' },
         { name: 'Appointments', path: '/doctor/appointments', icon: '📅' },
-        { name: 'Patients', path: '/doctor/patients', icon: '👥' },
-        { name: 'Schedule', path: '/doctor/schedule', icon: '🕒' },
       ];
     }
     return [];
@@ -76,7 +73,7 @@ const SidebarLayout = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-y-auto">
         {children}
       </div>
     </div>
