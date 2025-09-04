@@ -18,13 +18,13 @@ const Navbar = () => {
   const getNavItems = () => {
     if (role === 'PATIENT') {
       return [
-        { name: 'Dashboard', path: '/patient/dashboard', icon: '🏠' },
-        { name: 'My Appointments', path: '/patient/appointments', icon: '📅' },
+        { name: 'Dashboard', path: '/patient/dashboard' },
+        { name: 'My Appointments', path: '/patient/appointments' },
       ];
     } else if (role === 'DOCTOR') {
       return [
-        { name: 'Dashboard', path: '/doctor/dashboard', icon: '🏥' },
-        { name: 'Appointments', path: '/doctor/appointments', icon: '📅' },
+        { name: 'Dashboard', path: '/doctor/dashboard'},
+        { name: 'Appointments', path: '/doctor/appointments' },
       ];
     }
     return [];
@@ -40,8 +40,9 @@ const Navbar = () => {
           <div className="flex items-center space-x-2 sm:space-x-4">
             <Link to={role === 'PATIENT' ? '/patient/dashboard' : '/doctor/dashboard'}
               className="flex items-center space-x-1 sm:space-x-2">
-              <span className="text-xl sm:text-2xl">🏥</span>
-              <span className="text-lg sm:text-xl font-bold text-gray-900">MediCare</span>
+              <span className="text-lg sm:text-xl font-bold text-blue-700 tracking-wide hover:text-blue-800 transition-colors duration-200">
+  MediCare
+</span>
             </Link>
           </div>
 
